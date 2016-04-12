@@ -46,6 +46,14 @@ CWnd* InitWnd(CWnd* pParent)
 }
 
 extern "C" __declspec(dllexport)
+BOOL FinishWnd()
+{
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+	return theApp.FinishWnd();
+}
+
+extern "C" __declspec(dllexport)
 TCHAR* GetGUID(TCHAR* tc)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -88,6 +96,18 @@ CWnd* CRule_PringScreenApp::InitWnd(CWnd* pParent)
 	m_pSetupWnd->InitWnd(pParent);
 
 	return m_pSetupWnd;
+}
+
+BOOL CRule_PringScreenApp::FinishWnd()
+{
+	if (m_pSetupWnd)
+	{
+		m_pSetupWnd->DestroyWindow();
+		delete m_pSetupWnd;
+		m_pSetupWnd = NULL;
+	}
+
+	return TRUE;
 }
 
 TCHAR* CRule_PringScreenApp::GetGUID(TCHAR* tc)

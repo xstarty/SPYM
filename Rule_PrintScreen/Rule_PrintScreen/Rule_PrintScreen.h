@@ -27,6 +27,7 @@ public:
 
 public:
 	CWnd* InitWnd(CWnd* pParent);
+	BOOL FinishWnd();
 	TCHAR* GetGUID(TCHAR* tc);
 
 private:

@@ -20,7 +20,7 @@ CDllCenter::~CDllCenter()
 {
 }
 
-BOOL CDllCenter::LoadDLL()
+BOOL CDllCenter::LoadDll()
 {
 	m_mapDll.RemoveAll();
 
@@ -66,6 +66,32 @@ BOOL CDllCenter::LoadDLL()
 		MoveDllWndPos(pWnd, m_nDllUseCount);
 	}
 
+	return TRUE;
+}
+
+BOOL CDllCenter::FinishDll()
+{
+	CString strKey;
+	std::pair<HINSTANCE, int> Info;
+	POSITION pos = m_mapDll.GetStartPosition();
+	while (pos != NULL)
+	{
+		m_mapDll.GetNextAssoc(pos, strKey, Info);
+		{
+			CString strTemp;
+			fpFinish fpFin = (fpFinish)LoadDllFun(Info.first, strTemp, _T("FinishWnd"));
+			if (fpFin == NULL)
+				return FALSE;
+
+			if (!fpFin())
+				return FALSE;
+
+			FreeLibrary(Info.first);
+
+			Info.first = NULL;
+		}
+	}
+	
 	return TRUE;
 }
 

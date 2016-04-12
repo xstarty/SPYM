@@ -94,6 +94,8 @@ void CSPYMDlg::OnDestroy()
 {
 	if (m_pDllCenter)
 	{
+		m_pDllCenter->FinishDll();
+
 		delete m_pDllCenter;
 		m_pDllCenter = NULL;
 	}
@@ -106,7 +108,7 @@ BOOL CSPYMDlg::InitDLLCenter()
 	if (!m_pDllCenter)
 		return FALSE;
 
-	m_pDllCenter->LoadDLL();
-
+	m_pDllCenter->LoadDll();
+	
 	return TRUE;
 }

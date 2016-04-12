@@ -20,12 +20,27 @@ CSetupWnd::~CSetupWnd()
 }
 
 BEGIN_MESSAGE_MAP(CSetupWnd, CWnd)
+	ON_WM_DESTROY()
 END_MESSAGE_MAP()
-
-
 
 // CSetupWnd message handlers
 
+void CSetupWnd::OnDestroy()
+{
+	if (m_btnGroup)
+	{ 
+		delete m_btnGroup;
+		m_btnGroup = NULL;
+	}
+
+	if (m_btnEnable)
+	{
+		delete m_btnEnable;
+		m_btnEnable = NULL;
+	}
+
+	CWnd::OnDestroy();
+}
 
 BOOL CSetupWnd::InitWnd(CWnd* pParent)
 {

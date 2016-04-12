@@ -5,6 +5,7 @@
 
 typedef CWnd*	(*fpInitWnd)(CWnd* pParent);
 typedef TCHAR*	(*fpGetGUID)(TCHAR* tc);
+typedef BOOL	(*fpFinish)();
 
 // CDllCenter
 
@@ -15,7 +16,8 @@ public:
 	virtual ~CDllCenter();
 
 public:
-	BOOL LoadDLL();
+	BOOL LoadDll();
+	BOOL FinishDll();
 
 private:
 	BOOL GetDllPath(CStringArray& arDllPath);

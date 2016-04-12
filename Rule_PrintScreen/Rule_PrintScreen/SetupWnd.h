@@ -12,10 +12,12 @@ public:
 	virtual ~CSetupWnd();
 
 protected:
+	afx_msg void OnDestroy();
+
 	DECLARE_MESSAGE_MAP()
 
 public:
-	BOOL InitWnd(CWnd *pParent);
+	BOOL InitWnd(CWnd *pParent);	
 
 private:	
 	CButton* m_btnGroup;
