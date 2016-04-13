@@ -4,7 +4,9 @@
 #include "stdafx.h"
 #include "DllCenter.h"
 #include "Utility.h"
-#include "Resource.h"
+
+#include "json/json.h"
+#pragma comment(lib, "lib/lib_json.lib")
 
 #define $WndHieghtPos 30
 
@@ -22,6 +24,8 @@ CDllCenter::~CDllCenter()
 
 BOOL CDllCenter::LoadDll()
 {
+	Json::Value jsRoot;
+
 	m_mapDll.RemoveAll();
 
 	CStringArray arDllPath;
@@ -70,13 +74,13 @@ BOOL CDllCenter::LoadDll()
 }
 
 BOOL CDllCenter::FinishDll()
-{
-	CString strKey;
-	std::pair<HINSTANCE, int> Info;
+{	
+	std::pair<HINSTANCE, CString> Info;
 	POSITION pos = m_mapDll.GetStartPosition();
 	while (pos != NULL)
 	{
-		m_mapDll.GetNextAssoc(pos, strKey, Info);
+		int nIndex = -1;
+		m_mapDll.GetNextAssoc(pos, nIndex, Info);
 		{
 			CString strTemp;
 			fpFinish fpFin = (fpFinish)LoadDllFun(Info.first, strTemp, _T("FinishWnd"));
@@ -169,7 +173,9 @@ BOOL CDllCenter::CheckDllUse(TCHAR * tc, HINSTANCE hr)
 		if (strText.CompareNoCase(strGUID) != 0)
 			continue;
 
-		m_mapDll.SetAt(strGUID, std::make_pair(hr, ++m_nDllUseCount));
+		m_mapDll.SetAt(i, std::make_pair(hr, strGUID));
+
+		m_nDllUseCount++;
 		
 		return TRUE;
 	}
@@ -186,7 +192,6 @@ BOOL CDllCenter::MoveDllWndPos(CWnd * pWnd, int nPos)
 	m_pParent->GetClientRect(&rect);
 
 	pWnd->MoveWindow(0, $WndHieghtPos * (m_nDllUseCount - 1), rect.right, rect.bottom, TRUE);
-	
 
 	return FALSE;
 }

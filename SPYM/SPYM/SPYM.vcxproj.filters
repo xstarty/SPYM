@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\json">
+      <UniqueIdentifier>{e658afa5-a3be-48f3-9546-9fe66a6fd9cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\lib">
+      <UniqueIdentifier>{1eaa00ef-0aa3-4107-b979-4cabdbb14818}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SPYM.h">
@@ -35,6 +41,39 @@
     </ClInclude>
     <ClInclude Include="Utility.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="json\allocator.h">
+      <Filter>Source Files\json</Filter>
+    </ClInclude>
+    <ClInclude Include="json\assertions.h">
+      <Filter>Source Files\json</Filter>
+    </ClInclude>
+    <ClInclude Include="json\autolink.h">
+      <Filter>Source Files\json</Filter>
+    </ClInclude>
+    <ClInclude Include="json\config.h">
+      <Filter>Source Files\json</Filter>
+    </ClInclude>
+    <ClInclude Include="json\features.h">
+      <Filter>Source Files\json</Filter>
+    </ClInclude>
+    <ClInclude Include="json\forwards.h">
+      <Filter>Source Files\json</Filter>
+    </ClInclude>
+    <ClInclude Include="json\json.h">
+      <Filter>Source Files\json</Filter>
+    </ClInclude>
+    <ClInclude Include="json\reader.h">
+      <Filter>Source Files\json</Filter>
+    </ClInclude>
+    <ClInclude Include="json\value.h">
+      <Filter>Source Files\json</Filter>
+    </ClInclude>
+    <ClInclude Include="json\version.h">
+      <Filter>Source Files\json</Filter>
+    </ClInclude>
+    <ClInclude Include="json\writer.h">
+      <Filter>Source Files\json</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -68,5 +107,15 @@
     <Image Include="res\SPYM.ico">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="lib\lib_json.lib">
+      <Filter>Source Files\lib</Filter>
+    </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="json\ReadMe.txt">
+      <Filter>Source Files\json</Filter>
+    </Text>
   </ItemGroup>
 </Project>

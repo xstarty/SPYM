@@ -2,6 +2,7 @@
 
 #include <utility>
 #include <afxtempl.h>
+#include "Resource.h"
 
 typedef CWnd*	(*fpInitWnd)(CWnd* pParent);
 typedef TCHAR*	(*fpGetGUID)(TCHAR* tc);
@@ -11,6 +12,12 @@ typedef BOOL	(*fpFinish)();
 
 class CDllCenter
 {
+	enum
+	{
+		$PrintScreen = IDS_GUID_START,
+		$Dll_Max
+	};
+
 public:
 	CDllCenter(CWnd *pParent);
 	virtual ~CDllCenter();
@@ -28,7 +35,7 @@ private:
 
 private:
 	CWnd* m_pParent;	
-	CMap<CString, LPCTSTR, std::pair<HINSTANCE, int>, std::pair<HINSTANCE, int>> m_mapDll;
+	CMap<int, int, std::pair<HINSTANCE, CString>, std::pair<HINSTANCE, CString>> m_mapDll;
 	int m_nDllUseCount;
 };
 
