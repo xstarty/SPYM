@@ -17,7 +17,10 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 public:
-	BOOL InitWnd(CWnd *pParent);	
+	BOOL InitWnd(CWnd *pParent);
+	
+	BOOL SaveWndParameter(CString& strParameter);
+	BOOL LoadWndParameter(CString& strParameter);
 
 private:	
 	CButton* m_btnGroup;

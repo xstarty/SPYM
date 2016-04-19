@@ -64,8 +64,32 @@ BOOL CSetupWnd::InitWnd(CWnd* pParent)
 	else
 	{
 		strText.LoadString(IDS_WND_ENABLE);
-		m_btnEnable->Create(strText,	WS_CHILD | WS_VISIBLE | BS_AUTOCHECKBOX, CRect(30, 22, 100, 50), this, IDC_STATIC);
+		m_btnEnable->Create(strText, WS_CHILD | WS_VISIBLE | BS_AUTOCHECKBOX, CRect(30, 22, 100, 50), this, IDC_STATIC);
 	}		
+
+	return TRUE;
+}
+
+BOOL CSetupWnd::SaveWndParameter(CString& strParameter)
+{
+	strParameter.Empty();
+
+	strParameter += m_btnEnable->GetCheck() == 1 ? "1" : "0";
+
+	return TRUE;
+}
+
+BOOL CSetupWnd::LoadWndParameter(CString& strParameter)
+{
+	CStringArray arData;
+
+	CString sToken = _T("");
+	int i = 0;
+	while (AfxExtractSubString(sToken, strParameter, i, ','))
+	{
+		arData.Add(sToken);
+		i++;
+	}
 
 	return TRUE;
 }

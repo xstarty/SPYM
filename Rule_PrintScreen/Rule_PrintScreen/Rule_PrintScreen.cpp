@@ -61,6 +61,22 @@ TCHAR* GetGUID(TCHAR* tc)
 	return theApp.GetGUID(tc);
 }
 
+extern "C" __declspec(dllexport)
+TCHAR* SaveWndParameter(TCHAR* tc)
+{
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+	return theApp.SaveWndParameter(tc);
+}
+
+extern "C" __declspec(dllexport)
+BOOL LoadWndParameter(TCHAR* tc)
+{
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+	return theApp.LoadWndParameter(tc);
+}
+
 // CRule_PringScreenApp
 
 BEGIN_MESSAGE_MAP(CRule_PringScreenApp, CWinApp)
@@ -117,4 +133,29 @@ TCHAR* CRule_PringScreenApp::GetGUID(TCHAR* tc)
 	lstrcpy(tc, strText);
 
 	return tc;
+}
+
+TCHAR* CRule_PringScreenApp::SaveWndParameter(TCHAR* tc)
+{
+	if (m_pSetupWnd)
+	{
+		CString strData;
+		m_pSetupWnd->SaveWndParameter(strData);
+
+		lstrcpy(tc, strData);
+	}
+
+	return tc;
+}
+
+BOOL CRule_PringScreenApp::LoadWndParameter(TCHAR* tc)
+{
+	if (m_pSetupWnd)
+	{
+		CString strData(tc);		
+
+		return m_pSetupWnd->LoadWndParameter(strData);
+	}
+
+	return FALSE;
 }

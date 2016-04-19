@@ -28,7 +28,11 @@ public:
 public:
 	CWnd* InitWnd(CWnd* pParent);
 	BOOL FinishWnd();
+	
 	TCHAR* GetGUID(TCHAR* tc);
+	
+	TCHAR* SaveWndParameter(TCHAR* tc);
+	BOOL LoadWndParameter(TCHAR* tc);
 
 private:
 	CSetupWnd* m_pSetupWnd;	

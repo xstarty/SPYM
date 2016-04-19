@@ -39,7 +39,6 @@ BOOL CDllCenter::LoadDll()
 		HINSTANCE hr = LoadDllLibrary(arDllPath.GetAt(i));
 		if (hr == NULL)
 			return FALSE;
-
 		
 		// Check DLL
 		fpGetGUID fpGUID = (fpGetGUID)LoadDllFun(hr, arDllPath.GetAt(i), _T("GetGUID"));
@@ -96,6 +95,65 @@ BOOL CDllCenter::FinishDll()
 		}
 	}
 	
+	return TRUE;
+}
+
+BOOL CDllCenter::SaveDllParameter()
+{
+	std::pair<HINSTANCE, CString> Info;
+	POSITION pos = m_mapDll.GetStartPosition();
+	while (pos != NULL)
+	{
+		int nIndex = -1;
+		m_mapDll.GetNextAssoc(pos, nIndex, Info);
+		{
+			CString strTemp;
+			fpSaveDll fpSave = (fpSaveDll)LoadDllFun(Info.first, strTemp, _T("SaveWndParameter"));
+			if (fpSave == NULL)
+				return FALSE;
+
+			TCHAR* tc = new TCHAR[512];
+
+			if (!fpSave(tc))
+				return FALSE;						
+
+			CString strData(tc);
+			delete[] tc;
+
+			// «Ý¸É¦sjson
+		}
+	}
+
+	return TRUE;
+}
+
+BOOL CDllCenter::LoadDllParameter()
+{
+	std::pair<HINSTANCE, CString> Info;
+	POSITION pos = m_mapDll.GetStartPosition();
+	while (pos != NULL)
+	{
+		int nIndex = -1;
+		m_mapDll.GetNextAssoc(pos, nIndex, Info);
+		{
+			CString strTemp;
+			fpLoadDll fpLoad = (fpLoadDll)LoadDllFun(Info.first, strTemp, _T("LoadWndParameter"));
+			if (fpLoad == NULL)
+				return FALSE;
+
+			TCHAR* tc = new TCHAR[512];
+			CString strData;
+
+			// «Ý¸ÉÅªjson
+			lstrcpy(tc, strData);
+
+			if (!fpLoad(tc))
+				return FALSE;
+			
+			delete[] tc;						
+		}
+	}
+
 	return TRUE;
 }
 
