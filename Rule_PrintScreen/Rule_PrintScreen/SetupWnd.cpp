@@ -130,7 +130,7 @@ BOOL CSetupWnd::InitWnd(CWnd* pParent)
 	m_stSec = new CStatic();
 	if (m_stSec)
 	{
-
+		strText.LoadString(IDS_WND_SEC);
 	}
 
 	m_edSec = new CEdit();
@@ -142,7 +142,7 @@ BOOL CSetupWnd::InitWnd(CWnd* pParent)
 	m_stPath = new CStatic();
 	if (m_stPath)
 	{
-
+		strText.LoadString(IDS_WND_PATH);
 	}
 
 	m_edPath = new CEdit();
