@@ -31,11 +31,16 @@ public:
 	BOOL SaveDllParameter();
 	BOOL LoadDllParameter();
 
-private:
+private:	
+	BOOL SaveFile(CString strData);
+	BOOL LoadFile(CString &strData);
+	CString GetSavePath();
+
+	CString GetGUID(HINSTANCE hr, CString strDllPath);
 	BOOL GetDllPath(CStringArray& arDllPath);
 	HINSTANCE LoadDllLibrary(CString strDllPath);
 	void* LoadDllFun(HINSTANCE hr, CString strDllPath, CString strFun);
-	BOOL CheckDllUse(TCHAR* tc, HINSTANCE hr);
+	BOOL CheckDllUse(CString strGUID, HINSTANCE hr);
 	BOOL MoveDllWndPos(CWnd* pWnd, int nPos);
 
 private:

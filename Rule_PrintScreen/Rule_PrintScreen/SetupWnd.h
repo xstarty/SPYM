@@ -7,6 +7,11 @@ class CSetupWnd : public CWnd
 {
 	DECLARE_DYNAMIC(CSetupWnd)
 
+	enum {
+		$VALUE_ENABLE = 0,
+		$VALUE_MAX
+	};
+
 public:
 	CSetupWnd();
 	virtual ~CSetupWnd();
@@ -25,6 +30,13 @@ public:
 private:	
 	CButton* m_btnGroup;
 	CButton* m_btnEnable;
+
+	CStatic* m_stSec;
+	CEdit* m_edSec;
+
+	CStatic* m_stPath;
+	CEdit* m_edPath;
+	CButton* m_btnPath;
 };
 
 

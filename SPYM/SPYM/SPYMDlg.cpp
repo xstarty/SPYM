@@ -102,6 +102,16 @@ void CSPYMDlg::OnDestroy()
 	CDialog::OnDestroy();
 }
 
+afx_msg void CSPYMDlg::OnOK()
+{
+	if (m_pDllCenter)
+	{
+		m_pDllCenter->SaveDllParameter();
+	}
+
+	CDialog::OnOK();
+}
+
 BOOL CSPYMDlg::InitDLLCenter()
 {
 	m_pDllCenter = new CDllCenter(this);

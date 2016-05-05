@@ -1,4 +1,4 @@
-// CDllCenter.cpp : implementation file
+﻿// CDllCenter.cpp : implementation file
 //
 
 #include "stdafx.h"
@@ -9,6 +9,7 @@
 #pragma comment(lib, "lib/lib_json.lib")
 
 #define $WndHieghtPos 30
+#define $SaveDataFile "\\DllSI"
 
 // CDllCenter
 
@@ -41,18 +42,10 @@ BOOL CDllCenter::LoadDll()
 			return FALSE;
 		
 		// Check DLL
-		fpGetGUID fpGUID = (fpGetGUID)LoadDllFun(hr, arDllPath.GetAt(i), _T("GetGUID"));
-		if (fpGUID == NULL)
-			return FALSE;		
-
-		CString strText;
-		strText.LoadString(IDS_GUID_START);
-		TCHAR* tc = new TCHAR[strText.GetLength() + 1];
-
-		tc = fpGUID(tc);
+		CString strGUID;
+		strGUID = GetGUID(hr, arDllPath.GetAt(i));
 		
-		BOOL bCheck = CheckDllUse(tc, hr);
-		delete[] tc;
+		BOOL bCheck = CheckDllUse(strGUID, hr);
 
 		if (!bCheck)
 			return FALSE;
@@ -69,6 +62,8 @@ BOOL CDllCenter::LoadDll()
 		MoveDllWndPos(pWnd, m_nDllUseCount);
 	}
 
+	LoadDllParameter();
+	
 	return TRUE;
 }
 
@@ -100,6 +95,12 @@ BOOL CDllCenter::FinishDll()
 
 BOOL CDllCenter::SaveDllParameter()
 {
+	CString strSaveData;
+	strSaveData = "{\"DllData\":";
+	
+	CString strItem;
+	strItem = "[{\"GUID\":\"%s\",\"Value\":\"%s\"}],";
+
 	std::pair<HINSTANCE, CString> Info;
 	POSITION pos = m_mapDll.GetStartPosition();
 	while (pos != NULL)
@@ -112,23 +113,63 @@ BOOL CDllCenter::SaveDllParameter()
 			if (fpSave == NULL)
 				return FALSE;
 
+			CString strGUID = GetGUID(Info.first, strTemp);
+
 			TCHAR* tc = new TCHAR[512];
 
 			if (!fpSave(tc))
 				return FALSE;						
 
 			CString strData(tc);
-			delete[] tc;
+			delete[] tc;		
 
-			// �ݸɦsjson
+			if (strGUID.IsEmpty() || strData.IsEmpty())
+				continue;
+
+			strTemp.Format(strItem, strGUID, strData);
+			strSaveData += strTemp;
 		}
 	}
+
+	strSaveData.TrimRight(',');	
+	strSaveData += "}";
+
+	BOOL bSave = SaveFile(strSaveData);
 
 	return TRUE;
 }
 
 BOOL CDllCenter::LoadDllParameter()
 {
+	CString strSaveData;
+	LoadFile(strSaveData);
+	std::string stdData(CW2A(strSaveData.GetString()));
+
+	CMap<CString, LPCTSTR, CString, LPCTSTR> m_mapData;
+	if (!strSaveData.IsEmpty())
+	{
+		Json::Reader reader;
+		Json::Value root;
+		if (reader.parse(stdData, root))
+		{
+			Json::Value arrayObj = root["DllData"];
+			for (unsigned int i = 0; i < arrayObj.size(); i++)
+			{
+				std::string strGUID;
+				std::string strValue;
+				if (arrayObj[i].isMember("GUID"))
+					strGUID = arrayObj[i]["GUID"].asString();
+
+				if (arrayObj[i].isMember("Value"))
+					strValue = arrayObj[i]["Value"].asString();
+
+				m_mapData.SetAt(CA2T(strGUID.c_str()), CA2T(strValue.c_str()));
+			}
+		}
+	}
+
+	//////////////////////////////////////////////
+	
 	std::pair<HINSTANCE, CString> Info;
 	POSITION pos = m_mapDll.GetStartPosition();
 	while (pos != NULL)
@@ -141,20 +182,90 @@ BOOL CDllCenter::LoadDllParameter()
 			if (fpLoad == NULL)
 				return FALSE;
 
-			TCHAR* tc = new TCHAR[512];
-			CString strData;
+			CString strValue;
+			if (m_mapData.Lookup(Info.second, strValue))
+			{
+				TCHAR* tc = new TCHAR[512];
+				lstrcpy(tc, strValue);
 
-			// �ݸ�Ūjson
-			lstrcpy(tc, strData);
+				if (!fpLoad(tc))
+					return FALSE;
 
-			if (!fpLoad(tc))
-				return FALSE;
-			
-			delete[] tc;						
+				delete[] tc;
+			}			
 		}
 	}
 
 	return TRUE;
+}
+
+BOOL CDllCenter::SaveFile(CString strData)
+{
+	CStdioFile myFile;
+	CString strWriteItem;
+	if (myFile.Open(GetSavePath(), CFile::modeReadWrite | CFile::modeCreate) == NULL)
+		return FALSE;
+	else
+	{
+		myFile.WriteString(strData);
+		myFile.Close();
+	}
+	
+	return TRUE;
+}
+
+BOOL CDllCenter::LoadFile(CString &strData)
+{
+	CStdioFile myFile;
+	CString strPathListIterm;
+	if (myFile.Open(GetSavePath(), CFile::modeRead) == NULL)
+		return FALSE;
+	else
+	{
+		strData.Empty();
+
+		setlocale(LC_CTYPE, ("chs"));           // 解决 Unicode 亂碼
+		ULONGLONG dwLength = myFile.GetLength();
+		while (myFile.ReadString(strPathListIterm))    
+		{
+			strData.Append(strPathListIterm);  
+		}
+
+		myFile.Close();
+	}	
+
+	return TRUE;
+}
+
+CString CDllCenter::GetSavePath()
+{
+	CString strPath;
+	GetModuleFileName(NULL, strPath.GetBufferSetLength(MAX_PATH + 1), MAX_PATH);
+	strPath.ReleaseBuffer();
+	int nPos = strPath.ReverseFind('\\');
+	strPath = strPath.Left(nPos);
+	strPath += $SaveDataFile;
+
+	return strPath;
+}
+
+CString CDllCenter::GetGUID(HINSTANCE hr, CString strDllPath)
+{
+	fpGetGUID fpGUID = (fpGetGUID)LoadDllFun(hr, strDllPath, _T("GetGUID"));
+	if (fpGUID == NULL)
+		return FALSE;
+
+	CString strText;
+	strText.LoadString(IDS_GUID_START);
+	TCHAR* tc = new TCHAR[strText.GetLength() + 1];
+
+	tc = fpGUID(tc);
+
+	CString strGUID(tc);
+
+	delete[] tc;	
+
+	return strGUID;
 }
 
 BOOL CDllCenter::GetDllPath(CStringArray& arDllPath)
@@ -216,9 +327,8 @@ void* CDllCenter::LoadDllFun(HINSTANCE hr, CString strDllPath, CString strFun)
 	return fp;
 }
 
-BOOL CDllCenter::CheckDllUse(TCHAR * tc, HINSTANCE hr)
-{
-	CString strGUID(tc);
+BOOL CDllCenter::CheckDllUse(CString strGUID, HINSTANCE hr)
+{	
 	CString strText;
 
 	for (int i = IDS_GUID_START; i < IDS_GUID_END; i++)

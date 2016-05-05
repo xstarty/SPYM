@@ -31,6 +31,7 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	afx_msg void OnDestroy();
+	afx_msg void OnOK();
 	DECLARE_MESSAGE_MAP()
 
 private:

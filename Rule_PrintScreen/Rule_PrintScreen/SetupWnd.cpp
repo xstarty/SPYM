@@ -55,7 +55,7 @@ BOOL CSetupWnd::InitWnd(CWnd* pParent)
 	else
 	{
 		strText.LoadString(IDS_WND_GROUP);
-		m_btnGroup->Create(strText, WS_CHILD | WS_VISIBLE | BS_GROUPBOX, CRect(0, 0, rect.right, 60), this, IDC_STATIC);
+		m_btnGroup->Create(strText, WS_CHILD | WS_VISIBLE | BS_GROUPBOX, CRect(0, 0, rect.right, 60), this, IDC_BTN01);
 	}
 
 	m_btnEnable = new CButton();
@@ -64,7 +64,7 @@ BOOL CSetupWnd::InitWnd(CWnd* pParent)
 	else
 	{
 		strText.LoadString(IDS_WND_ENABLE);
-		m_btnEnable->Create(strText, WS_CHILD | WS_VISIBLE | BS_AUTOCHECKBOX, CRect(30, 22, 100, 50), this, IDC_STATIC);
+		m_btnEnable->Create(strText, WS_CHILD | WS_VISIBLE | BS_AUTOCHECKBOX, CRect(15, 22, 80, 50), this, IDC_BTN02);
 	}		
 
 	return TRUE;
@@ -90,6 +90,11 @@ BOOL CSetupWnd::LoadWndParameter(CString& strParameter)
 		arData.Add(sToken);
 		i++;
 	}
+
+	if (arData.GetCount() != $VALUE_MAX)
+		return FALSE;
+		
+	m_btnEnable->SetCheck(_tstoi(arData.GetAt($VALUE_ENABLE)));
 
 	return TRUE;
 }
