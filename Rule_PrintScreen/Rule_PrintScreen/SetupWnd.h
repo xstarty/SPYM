@@ -17,6 +17,7 @@ public:
 	virtual ~CSetupWnd();
 
 protected:
+	afx_msg void OnBtnClickSavePath();
 	afx_msg void OnDestroy();
 
 	DECLARE_MESSAGE_MAP()
