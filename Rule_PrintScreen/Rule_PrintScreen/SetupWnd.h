@@ -9,6 +9,8 @@ class CSetupWnd : public CWnd
 
 	enum {
 		$VALUE_ENABLE = 0,
+		$VALUE_SEC,
+		$VALUE_PATH,
 		$VALUE_MAX
 	};
 
@@ -17,7 +19,7 @@ public:
 	virtual ~CSetupWnd();
 
 protected:
-	afx_msg void OnBtnClickSavePath();
+	afx_msg void OnBtnClickSavePath();	
 	afx_msg void OnDestroy();
 
 	DECLARE_MESSAGE_MAP()
@@ -27,6 +29,9 @@ public:
 	
 	BOOL SaveWndParameter(CString& strParameter);
 	BOOL LoadWndParameter(CString& strParameter);
+
+private:
+	CString GetPath();
 
 private:	
 	CButton* m_btnGroup;

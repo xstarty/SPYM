@@ -203,7 +203,7 @@ BOOL CDllCenter::SaveFile(CString strData)
 {
 	CStdioFile myFile;
 	CString strWriteItem;
-	if (myFile.Open(GetSavePath(), CFile::modeReadWrite | CFile::modeCreate) == NULL)
+	if (myFile.Open(GetPath(TRUE), CFile::modeReadWrite | CFile::modeCreate) == NULL)
 		return FALSE;
 	else
 	{
@@ -218,7 +218,7 @@ BOOL CDllCenter::LoadFile(CString &strData)
 {
 	CStdioFile myFile;
 	CString strPathListIterm;
-	if (myFile.Open(GetSavePath(), CFile::modeRead) == NULL)
+	if (myFile.Open(GetPath(TRUE), CFile::modeRead) == NULL)
 		return FALSE;
 	else
 	{
@@ -237,14 +237,17 @@ BOOL CDllCenter::LoadFile(CString &strData)
 	return TRUE;
 }
 
-CString CDllCenter::GetSavePath()
+CString CDllCenter::GetPath(BOOL bSavePath)
 {
 	CString strPath;
 	GetModuleFileName(NULL, strPath.GetBufferSetLength(MAX_PATH + 1), MAX_PATH);
 	strPath.ReleaseBuffer();
 	int nPos = strPath.ReverseFind('\\');
 	strPath = strPath.Left(nPos);
-	strPath += $SaveDataFile;
+	strPath.Replace(L"\\", L"\\\\");
+
+	if (bSavePath)
+		strPath += $SaveDataFile;
 
 	return strPath;
 }
@@ -272,11 +275,7 @@ BOOL CDllCenter::GetDllPath(CStringArray& arDllPath)
 {
 	arDllPath.RemoveAll();
 
-	CString strPath;
-	GetModuleFileName(NULL, strPath.GetBufferSetLength(MAX_PATH + 1), MAX_PATH);
-	strPath.ReleaseBuffer();
-	int nPos = strPath.ReverseFind('\\');
-	strPath = strPath.Left(nPos);
+	CString strPath(GetPath(FALSE));
 
 	CFileFind finder;
 	BOOL bWorking = finder.FindFile(strPath + _T("\\\\" + "*.dll"));

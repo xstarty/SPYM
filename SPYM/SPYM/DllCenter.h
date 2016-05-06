@@ -33,8 +33,8 @@ public:
 
 private:	
 	BOOL SaveFile(CString strData);
-	BOOL LoadFile(CString &strData);
-	CString GetSavePath();
+	BOOL LoadFile(CString &strData);	
+	CString GetPath(BOOL bSavePath);
 
 	CString GetGUID(HINSTANCE hr, CString strDllPath);
 	BOOL GetDllPath(CStringArray& arDllPath);
