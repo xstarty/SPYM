@@ -19,16 +19,20 @@ CSPYMDlg::CSPYMDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(IDD_SPYM_DIALOG, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+
+	m_nStatus = $STATUS_STOP;
 }
 
 void CSPYMDlg::DoDataExchange(CDataExchange* pDX)
 {
+	DDX_Control(pDX, IDC_BUTTON_START, m_bStart);
 	CDialog::DoDataExchange(pDX);	
 }
 
 BEGIN_MESSAGE_MAP(CSPYMDlg, CDialog)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDC_BUTTON_START, OnStart)
 	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
@@ -89,6 +93,30 @@ HCURSOR CSPYMDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+afx_msg void CSPYMDlg::OnStart()
+{
+	CString strText;
+	if (m_nStatus == $STATUS_STOP)	// Stop -> Start
+	{
+		m_nStatus = $STATUS_START;
+
+		if (m_pDllCenter)
+		{
+			m_pDllCenter->SaveDllParameter();
+		}
+
+		strText.LoadString(IDS_STOP);
+	}
+	else if (m_nStatus == $STATUS_START)
+	{
+		m_nStatus = $STATUS_STOP;
+
+		strText.LoadString(IDS_START);
+	}
+
+	m_bStart.SetWindowText(strText);
+}
+
 void CSPYMDlg::OnDestroy()
 /*---------------------------------------------------------------------------*/
 {
@@ -100,16 +128,6 @@ void CSPYMDlg::OnDestroy()
 		m_pDllCenter = NULL;
 	}
 	CDialog::OnDestroy();
-}
-
-afx_msg void CSPYMDlg::OnOK()
-{
-	if (m_pDllCenter)
-	{
-		m_pDllCenter->SaveDllParameter();
-	}
-
-	CDialog::OnOK();
 }
 
 BOOL CSPYMDlg::InitDLLCenter()

@@ -95,6 +95,7 @@ BOOL CDllCenter::FinishDll()
 
 BOOL CDllCenter::SaveDllParameter()
 {
+	// Use Json format
 	CString strSaveData;
 	strSaveData = "{\"DllData\":";
 	
@@ -118,7 +119,11 @@ BOOL CDllCenter::SaveDllParameter()
 			TCHAR* tc = new TCHAR[512];
 
 			if (!fpSave(tc))
-				return FALSE;						
+			{
+				delete[] tc;
+				return FALSE;
+			}
+				
 
 			CString strData(tc);
 			delete[] tc;		
@@ -141,6 +146,7 @@ BOOL CDllCenter::SaveDllParameter()
 
 BOOL CDllCenter::LoadDllParameter()
 {
+	// Paser Json data
 	CString strSaveData;
 	LoadFile(strSaveData);
 	std::string stdData(CW2A(strSaveData.GetString()));
@@ -189,7 +195,10 @@ BOOL CDllCenter::LoadDllParameter()
 				lstrcpy(tc, strValue);
 
 				if (!fpLoad(tc))
+				{
+					delete[] tc;
 					return FALSE;
+				}					
 
 				delete[] tc;
 			}			
@@ -224,7 +233,7 @@ BOOL CDllCenter::LoadFile(CString &strData)
 	{
 		strData.Empty();
 
-		setlocale(LC_CTYPE, ("chs"));           // 解决 Unicode 亂碼
+		setlocale(LC_CTYPE, ("chs"));           // Unicode solve garbled
 		ULONGLONG dwLength = myFile.GetLength();
 		while (myFile.ReadString(strPathListIterm))    
 		{

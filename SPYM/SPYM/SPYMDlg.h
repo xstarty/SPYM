@@ -9,6 +9,13 @@ class CDllCenter;
 // CSPYMDlg dialog
 class CSPYMDlg : public CDialog
 {
+	enum
+	{
+		$STATUS_STOP = 0,
+		$STATUS_START,
+		$STATUS_ERROR,
+	};
+
 // Construction
 public:
 	CSPYMDlg(CWnd* pParent = NULL);	// standard constructor
@@ -21,7 +28,6 @@ public:
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
 
-
 // Implementation
 protected:
 	HICON m_hIcon;
@@ -30,8 +36,8 @@ protected:
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
-	afx_msg void OnDestroy();
-	afx_msg void OnOK();
+	afx_msg void OnStart();
+	afx_msg void OnDestroy();	
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -39,4 +45,7 @@ private:
 
 private:
 	CDllCenter* m_pDllCenter;
+
+	CButton m_bStart;
+	int m_nStatus;
 };
