@@ -34,6 +34,8 @@ public:
 	TCHAR* SaveWndParameter(TCHAR* tc);
 	BOOL LoadWndParameter(TCHAR* tc);
 
+	BOOL Exec();
+
 private:
 	CSetupWnd* m_pSetupWnd;	
 };

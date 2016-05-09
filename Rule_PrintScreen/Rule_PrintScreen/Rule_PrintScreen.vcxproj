@@ -190,6 +190,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Control.cpp" />
+    <ClCompile Include="ExecProcess.cpp" />
     <ClCompile Include="Rule_PrintScreen.cpp" />
     <ClCompile Include="SetupWnd.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -201,6 +202,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Control.h" />
+    <ClInclude Include="ExecProcess.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Rule_PrintScreen.h" />
     <ClInclude Include="SetupWnd.h" />

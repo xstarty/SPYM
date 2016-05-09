@@ -11,12 +11,21 @@
 #define $WndHieghtPos 30
 #define $SaveDataFile "\\DllSI"
 
+#define $INITWND _T("InitWnd")
+#define $FINISHWND _T("FinishWnd")
+#define $SAVEWNDPARAMETER _T("SaveWndParameter")
+#define $LOADWNDPARAMETER _T("LoadWndParameter")
+#define $GETGUID _T("GetGUID")
+#define $EXEC _T("Exec")
+
 // CDllCenter
 
 CDllCenter::CDllCenter(CWnd *pParent)
 {
 	m_pParent = pParent;
-	m_nDllUseCount = 0;
+	m_nDllUseCount = 0;	
+	m_pThread = NULL;
+	m_bThreadStop = FALSE;
 }
 
 CDllCenter::~CDllCenter()
@@ -51,7 +60,7 @@ BOOL CDllCenter::LoadDll()
 			return FALSE;
 
 		// Init DLL
-		fpInitWnd fpWnd = (fpInitWnd)LoadDllFun(hr, arDllPath.GetAt(i), _T("InitWnd"));
+		fpInitWnd fpWnd = (fpInitWnd)LoadDllFun(hr, arDllPath.GetAt(i), $INITWND);
 		if (fpWnd == NULL)
 			return FALSE;
 
@@ -77,7 +86,7 @@ BOOL CDllCenter::FinishDll()
 		m_mapDll.GetNextAssoc(pos, nIndex, Info);
 		{
 			CString strTemp;
-			fpFinish fpFin = (fpFinish)LoadDllFun(Info.first, strTemp, _T("FinishWnd"));
+			fpFinish fpFin = (fpFinish)LoadDllFun(Info.first, strTemp, $FINISHWND);
 			if (fpFin == NULL)
 				return FALSE;
 
@@ -110,7 +119,7 @@ BOOL CDllCenter::SaveDllParameter()
 		m_mapDll.GetNextAssoc(pos, nIndex, Info);
 		{
 			CString strTemp;
-			fpSaveDll fpSave = (fpSaveDll)LoadDllFun(Info.first, strTemp, _T("SaveWndParameter"));
+			fpSaveDll fpSave = (fpSaveDll)LoadDllFun(Info.first, strTemp, $SAVEWNDPARAMETER);
 			if (fpSave == NULL)
 				return FALSE;
 
@@ -184,7 +193,7 @@ BOOL CDllCenter::LoadDllParameter()
 		m_mapDll.GetNextAssoc(pos, nIndex, Info);
 		{
 			CString strTemp;
-			fpLoadDll fpLoad = (fpLoadDll)LoadDllFun(Info.first, strTemp, _T("LoadWndParameter"));
+			fpLoadDll fpLoad = (fpLoadDll)LoadDllFun(Info.first, strTemp, $LOADWNDPARAMETER);
 			if (fpLoad == NULL)
 				return FALSE;
 
@@ -263,7 +272,7 @@ CString CDllCenter::GetPath(BOOL bSavePath)
 
 CString CDllCenter::GetGUID(HINSTANCE hr, CString strDllPath)
 {
-	fpGetGUID fpGUID = (fpGetGUID)LoadDllFun(hr, strDllPath, _T("GetGUID"));
+	fpGetGUID fpGUID = (fpGetGUID)LoadDllFun(hr, strDllPath, $GETGUID);
 	if (fpGUID == NULL)
 		return FALSE;
 
@@ -372,4 +381,113 @@ BOOL CDllCenter::MoveDllWndPos(CWnd * pWnd, int nPos)
 	return FALSE;
 }
 
+BOOL CDllCenter::StartThread()
+{
+	StopThread();
 
+	CSingleLock csStop(&m_csStop);
+	csStop.Lock();
+	{
+		m_bThreadStop = FALSE;
+	}		
+	csStop.Unlock();
+
+	CWinThread* pThread = AfxBeginThread((AFX_THREADPROC)ExecThread, (LPVOID)this, THREAD_PRIORITY_NORMAL, 0, 0, NULL);
+	if (NULL == pThread)
+	{		
+		return FALSE;
+	}
+
+	m_pThread = pThread;
+	pThread->ResumeThread();
+
+	return TRUE;
+}
+
+BOOL CDllCenter::StopThread()
+{	
+	if (m_pThread == NULL)
+		return TRUE;
+
+	if (m_pThread->m_hThread == NULL)
+		return TRUE;
+
+	CSingleLock csStop(&m_csStop);
+	csStop.Lock();
+	{
+		m_bThreadStop = TRUE;
+	}
+	csStop.Unlock();
+
+	DWORD dwCode = ::WaitForSingleObject(m_pThread->m_hThread, 5000);
+	if (dwCode != WAIT_OBJECT_0)
+	{
+		DWORD dwExitCode;
+		if (GetExitCodeThread(m_pThread->m_hThread, &dwExitCode) && dwExitCode == STILL_ACTIVE)
+		{
+			::TerminateThread(m_pThread->m_hThread, -1);
+		}
+	}
+
+	m_pThread->m_hThread = NULL;
+	m_pThread = NULL;
+
+	return TRUE;
+}
+
+BOOL CDllCenter::SuspendThread()
+{
+	if (m_pThread)
+	{
+		m_pThread->SuspendThread();
+
+		return TRUE;
+	}
+		
+	return FALSE;
+}
+
+BOOL CDllCenter::ResumeThread()
+{
+	if (m_pThread)
+	{ 
+		m_pThread->ResumeThread();
+		return TRUE;
+	}
+
+	return FALSE;
+	
+}
+
+void CDllCenter::ExecThread(LPVOID lParam)
+{
+	CDllCenter* pObject = (CDllCenter*)lParam;
+	if(pObject)
+		pObject->ExecThreadImp();
+
+	return;
+}
+
+BOOL CDllCenter::ExecThreadImp()
+{
+	std::pair<HINSTANCE, CString> Info;
+	POSITION pos = m_mapDll.GetStartPosition();
+	while (pos != NULL)
+	{
+		int nIndex = -1;
+		m_mapDll.GetNextAssoc(pos, nIndex, Info);
+		{
+			CString strTemp;
+			fpExec fpExecDll = (fpExec)LoadDllFun(Info.first, strTemp, $EXEC);
+			if (fpExecDll == NULL)
+				continue;
+
+			if (!fpExecDll())
+			{				
+				continue;
+			}
+		}
+	}
+
+	return TRUE;
+}

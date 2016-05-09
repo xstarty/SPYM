@@ -77,6 +77,14 @@ BOOL LoadWndParameter(TCHAR* tc)
 	return theApp.LoadWndParameter(tc);
 }
 
+extern "C" __declspec(dllexport)
+BOOL Exec()
+{
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+	return theApp.Exec();
+}
+
 // CRule_PringScreenApp
 
 BEGIN_MESSAGE_MAP(CRule_PringScreenApp, CWinApp)
@@ -157,5 +165,10 @@ BOOL CRule_PringScreenApp::LoadWndParameter(TCHAR* tc)
 		return m_pSetupWnd->LoadWndParameter(strData);
 	}
 
+	return FALSE;
+}
+
+BOOL CRule_PringScreenApp::Exec()
+{
 	return FALSE;
 }

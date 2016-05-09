@@ -98,19 +98,26 @@ afx_msg void CSPYMDlg::OnStart()
 	CString strText;
 	if (m_nStatus == $STATUS_STOP)	// Stop -> Start
 	{
-		m_nStatus = $STATUS_START;
-
 		if (m_pDllCenter)
 		{
 			m_pDllCenter->SaveDllParameter();
+
+			if (!m_pDllCenter->StartThread())
+				return;				
 		}
 
+		m_nStatus = $STATUS_START;
 		strText.LoadString(IDS_STOP);
 	}
 	else if (m_nStatus == $STATUS_START)
-	{
+	{		
+		if (m_pDllCenter)
+		{
+			if (!m_pDllCenter->StopThread())
+				return;
+		}
+		
 		m_nStatus = $STATUS_STOP;
-
 		strText.LoadString(IDS_START);
 	}
 

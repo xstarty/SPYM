@@ -9,6 +9,7 @@ typedef TCHAR*	(*fpGetGUID)(TCHAR* tc);
 typedef BOOL	(*fpFinish)();
 typedef TCHAR*	(*fpSaveDll)(TCHAR* tc);
 typedef TCHAR*	(*fpLoadDll)(TCHAR* tc);
+typedef BOOL	(*fpExec)();
 
 // CDllCenter
 
@@ -43,10 +44,26 @@ private:
 	BOOL CheckDllUse(CString strGUID, HINSTANCE hr);
 	BOOL MoveDllWndPos(CWnd* pWnd, int nPos);
 
+public:
+	BOOL StartThread();
+	BOOL StopThread();		
+	BOOL SuspendThread();
+	BOOL ResumeThread();
+
+private:
+	static void ExecThread(LPVOID lParam);
+	BOOL ExecThreadImp();
+	
+
+
 private:
 	CWnd* m_pParent;	
 	CMap<int, int, std::pair<HINSTANCE, CString>, std::pair<HINSTANCE, CString>> m_mapDll;
 	int m_nDllUseCount;
+	
+	CWinThread* m_pThread;
+	CCriticalSection m_csStop;
+	BOOL m_bThreadStop;
 };
 
 
