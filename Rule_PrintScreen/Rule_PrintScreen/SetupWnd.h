@@ -30,8 +30,12 @@ public:
 	BOOL SaveWndParameter(CString& strParameter);
 	BOOL LoadWndParameter(CString& strParameter);
 
-private:
+	BOOL IsEnable();
+	int GetSec();
 	CString GetPath();
+
+private:
+	CString GetDefPath();
 
 private:	
 	CButton* m_btnGroup;

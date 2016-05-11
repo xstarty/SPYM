@@ -9,7 +9,7 @@ typedef TCHAR*	(*fpGetGUID)(TCHAR* tc);
 typedef BOOL	(*fpFinish)();
 typedef TCHAR*	(*fpSaveDll)(TCHAR* tc);
 typedef TCHAR*	(*fpLoadDll)(TCHAR* tc);
-typedef BOOL	(*fpExec)();
+typedef BOOL	(*fpExec)(CWnd* pParent);
 
 // CDllCenter
 

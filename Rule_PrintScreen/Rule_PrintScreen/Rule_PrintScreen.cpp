@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "Rule_PrintScreen.h"
 #include "SetupWnd.h"
+#include "ExecProcess.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -78,11 +79,11 @@ BOOL LoadWndParameter(TCHAR* tc)
 }
 
 extern "C" __declspec(dllexport)
-BOOL Exec()
+BOOL Exec(CWnd* pParent)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-	return theApp.Exec();
+	return theApp.Exec(pParent);
 }
 
 // CRule_PringScreenApp
@@ -131,6 +132,12 @@ BOOL CRule_PringScreenApp::FinishWnd()
 		m_pSetupWnd = NULL;
 	}
 
+	if (m_pExec)
+	{		
+		delete m_pExec;
+		m_pExec = NULL;
+	}
+
 	return TRUE;
 }
 
@@ -168,7 +175,23 @@ BOOL CRule_PringScreenApp::LoadWndParameter(TCHAR* tc)
 	return FALSE;
 }
 
-BOOL CRule_PringScreenApp::Exec()
+BOOL CRule_PringScreenApp::Exec(CWnd* pParent)
 {
-	return FALSE;
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+	if (!m_pSetupWnd)
+		return FALSE;
+
+	if (!m_pSetupWnd->IsEnable())
+		return FALSE;
+
+	m_pExec = new CExecProcess();	
+	if (!m_pExec->Create(NULL, NULL, WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), pParent, IDC_SETUPWND))
+		return NULL;
+
+	m_pExec->SetData(m_pSetupWnd->GetSec(), m_pSetupWnd->GetPath());
+
+	m_pExec->StartProcess();
+
+	return TRUE;
 }

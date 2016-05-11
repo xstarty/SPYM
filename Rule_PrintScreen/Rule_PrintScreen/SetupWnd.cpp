@@ -153,7 +153,7 @@ BOOL CSetupWnd::InitWnd(CWnd* pParent)
 	{
 		m_edPath->Create(WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_BORDER | ES_AUTOHSCROLL, CRect(245, 33, 470, 53), this, IDC_ED02);
 
-		CString strPath(GetPath());
+		CString strPath(GetDefPath());
 		m_edPath->SetWindowText(strPath);
 	}
 
@@ -217,7 +217,28 @@ BOOL CSetupWnd::LoadWndParameter(CString& strParameter)
 	return TRUE;
 }
 
+BOOL CSetupWnd::IsEnable()
+{
+	return m_btnEnable->GetCheck();
+}
+
+int CSetupWnd::GetSec()
+{
+	CString strTemp;
+	m_edSec->GetWindowText(strTemp);
+
+	return _tstoi(strTemp);
+}
+
 CString CSetupWnd::GetPath()
+{
+	CString strTemp;
+	m_edPath->GetWindowText(strTemp);
+
+	return strTemp;
+}
+
+CString CSetupWnd::GetDefPath()
 {
 	CString strPath;
 	GetModuleFileName(NULL, strPath.GetBufferSetLength(MAX_PATH + 1), MAX_PATH);

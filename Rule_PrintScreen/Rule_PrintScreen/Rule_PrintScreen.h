@@ -14,6 +14,7 @@
 //
 
 class CSetupWnd;
+class CExecProcess;
 class CRule_PringScreenApp : public CWinApp
 {
 public:
@@ -34,8 +35,9 @@ public:
 	TCHAR* SaveWndParameter(TCHAR* tc);
 	BOOL LoadWndParameter(TCHAR* tc);
 
-	BOOL Exec();
+	BOOL Exec(CWnd* pParent);
 
 private:
 	CSetupWnd* m_pSetupWnd;	
+	CExecProcess* m_pExec;
 };

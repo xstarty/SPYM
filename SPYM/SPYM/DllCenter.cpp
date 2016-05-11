@@ -482,7 +482,7 @@ BOOL CDllCenter::ExecThreadImp()
 			if (fpExecDll == NULL)
 				continue;
 
-			if (!fpExecDll())
+			if (!fpExecDll(m_pParent))
 			{				
 				continue;
 			}
