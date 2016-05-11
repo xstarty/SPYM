@@ -11,7 +11,7 @@
 #define CALLBACK_ID 1
 #define CALLBACK_FREQUENCY 1000
 
-BEGIN_MESSAGE_MAP(CExecProcess, CExecProcess)
+BEGIN_MESSAGE_MAP(CExecProcess, CWnd)
 	//{{AFX_MSG_MAP(CExecWnd)
 	ON_WM_TIMER()
 	//}}AFX_MSG_MAP

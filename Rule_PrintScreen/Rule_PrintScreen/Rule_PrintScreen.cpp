@@ -177,7 +177,7 @@ BOOL CRule_PringScreenApp::LoadWndParameter(TCHAR* tc)
 
 BOOL CRule_PringScreenApp::Exec(CWnd* pParent)
 {
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+	//AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	if (!m_pSetupWnd)
 		return FALSE;
@@ -186,7 +186,7 @@ BOOL CRule_PringScreenApp::Exec(CWnd* pParent)
 		return FALSE;
 
 	m_pExec = new CExecProcess();	
-	if (!m_pExec->Create(NULL, NULL, WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), pParent, IDC_SETUPWND))
+	if (!m_pExec->Create(NULL, NULL, WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), pParent, IDC_SETUPWND+2565))
 		return NULL;
 
 	m_pExec->SetData(m_pSetupWnd->GetSec(), m_pSetupWnd->GetPath());
