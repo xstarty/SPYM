@@ -38,6 +38,7 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	afx_msg void OnStart();
 	afx_msg void OnDestroy();	
+	afx_msg BOOL PreTranslateMessage(MSG* pMsg);
 	DECLARE_MESSAGE_MAP()
 
 private:

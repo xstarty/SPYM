@@ -137,6 +137,16 @@ void CSPYMDlg::OnDestroy()
 	CDialog::OnDestroy();
 }
 
+BOOL CSPYMDlg::PreTranslateMessage(MSG* pMsg)
+{
+	if (m_pDllCenter)
+	{
+		m_pDllCenter->PreTranslateMessage(pMsg);
+	}
+
+	return CDialog::PreTranslateMessage(pMsg);
+}
+
 BOOL CSPYMDlg::InitDLLCenter()
 {
 	m_pDllCenter = new CDllCenter(this);

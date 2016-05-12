@@ -5,6 +5,7 @@
 #include "Resource.h"
 
 typedef CWnd*	(*fpInitWnd)(CWnd* pParent);
+typedef BOOL	(*fpPreTranslateMessage)(void *pParam);
 typedef TCHAR*	(*fpGetGUID)(TCHAR* tc);
 typedef BOOL	(*fpFinish)();
 typedef TCHAR*	(*fpSaveDll)(TCHAR* tc);
@@ -31,6 +32,8 @@ public:
 
 	BOOL SaveDllParameter();
 	BOOL LoadDllParameter();
+
+	BOOL PreTranslateMessage(void *pParam);
 
 private:	
 	BOOL SaveFile(CString strData);

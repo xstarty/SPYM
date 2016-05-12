@@ -12,6 +12,7 @@
 #define $SaveDataFile "\\DllSI"
 
 #define $INITWND _T("InitWnd")
+#define $PRETRNASMSG _T("PreTranlateMsg")
 #define $FINISHWND _T("FinishWnd")
 #define $SAVEWNDPARAMETER _T("SaveWndParameter")
 #define $LOADWNDPARAMETER _T("LoadWndParameter")
@@ -217,6 +218,29 @@ BOOL CDllCenter::LoadDllParameter()
 	return TRUE;
 }
 
+BOOL CDllCenter::PreTranslateMessage(void * pParam)
+{
+	std::pair<HINSTANCE, CString> Info;
+	POSITION pos = m_mapDll.GetStartPosition();
+	while (pos != NULL)
+	{
+		int nIndex = -1;
+		m_mapDll.GetNextAssoc(pos, nIndex, Info);
+		{
+			CString strTemp;
+			fpPreTranslateMessage fpPreTrans = (fpPreTranslateMessage)LoadDllFun(Info.first, strTemp, $PRETRNASMSG);
+			if (fpPreTrans == NULL)
+				return FALSE;
+
+			BOOL bErr = fpPreTrans(pParam);
+			if (!bErr)
+				return FALSE;
+		}
+	}
+
+	return TRUE;
+}
+
 BOOL CDllCenter::SaveFile(CString strData)
 {
 	CStdioFile myFile;
@@ -392,7 +416,7 @@ BOOL CDllCenter::StartThread()
 	}		
 	csStop.Unlock();
 
-	CWinThread* pThread = AfxBeginThread((AFX_THREADPROC)ExecThread, (LPVOID)this, THREAD_PRIORITY_NORMAL, 0, 0, NULL);
+	CWinThread* pThread = AfxBeginThread((AFX_THREADPROC)ExecThread, (LPVOID)this, THREAD_PRIORITY_NORMAL, CREATE_SUSPENDED, 0, NULL);
 	if (NULL == pThread)
 	{		
 		return FALSE;

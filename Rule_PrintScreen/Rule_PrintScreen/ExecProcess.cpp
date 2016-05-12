@@ -8,38 +8,13 @@
 
 // ExecProcess
 
-#define CALLBACK_ID 1
-#define CALLBACK_FREQUENCY 1000
-
-BEGIN_MESSAGE_MAP(CExecProcess, CWnd)
-	//{{AFX_MSG_MAP(CExecWnd)
-	ON_WM_TIMER()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
 CExecProcess::CExecProcess()
 {
-
+	m_bStop = FALSE;
 }
 
 CExecProcess::~CExecProcess()
 {	
-}
-
-void CExecProcess::OnTimer(UINT nIDEvent)
-{
-	switch (nIDEvent)
-	{
-		case CALLBACK_ID:
-		{
-			PrintScreen();
-
-			return;
-		}
-	}
-
-	CWnd::OnTimer(nIDEvent);
-	
 }
 
 void CExecProcess::SetData(int nSec, CString strPath)
@@ -49,16 +24,23 @@ void CExecProcess::SetData(int nSec, CString strPath)
 }
 
 BOOL CExecProcess::StartProcess()
-{	
-	SetTimer(CALLBACK_ID, CALLBACK_FREQUENCY, NULL);
-	
+{		
+	while (!m_bStop)
+	{
+		PrintScreen();
+
+		Sleep(m_nSecond * 1000);
+	}
 	
 	return  TRUE;
 }
 
 BOOL CExecProcess::StopProcess()
 {
-	KillTimer(CALLBACK_ID);
+	if (m_bStop == TRUE)
+		return FALSE;
+
+	m_bStop = TRUE;
 
 	return TRUE;
 }
