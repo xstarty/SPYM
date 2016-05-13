@@ -56,6 +56,9 @@
     <ClInclude Include="ExecProcess.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="aviUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Rule_PrintScreen.def">

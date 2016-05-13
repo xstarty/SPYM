@@ -5,6 +5,7 @@
 #include "Rule_PrintScreen.h"
 #include "ExecProcess.h"
 #include <atlimage.h>
+#include "aviUtil.h"
 
 // ExecProcess
 
@@ -25,6 +26,15 @@ void CExecProcess::SetData(int nSec, CString strPath)
 
 BOOL CExecProcess::StartProcess()
 {		
+
+	//include "aviUtil.h".
+	//Call START_AVI("foo.avi"); // you must include the .avi extention.
+	//Call ADD_FRAME_FROM_DIB_TO_AVI(yourDIB, "DIB", 30); // the dib is passed in as a HANDLE which can be obtained by loading the image with a Image library. (I used CxImage which is available on this site). Put this call in a while or for loop to add all the images you want to the AVI.
+	//Call STOP_AVI(); //this closes the avi and video. 
+	START_AVI(L"foo.avi");
+	ADD_FRAME_FROM_DIB_TO_AVI(yourDIB, L"DIB", 30);
+	STOP_AVI();
+
 	while (!m_bStop)
 	{
 		PrintScreen();
