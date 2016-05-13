@@ -54,17 +54,14 @@ public:
 	BOOL ResumeThread();
 
 private:
-	static void ExecThread(LPVOID lParam);
-	BOOL ExecThreadImp();
-	
-
+	BOOL ExecThreadImp(fpExec fpExecDll);
 
 private:
 	CWnd* m_pParent;	
 	CMap<int, int, std::pair<HINSTANCE, CString>, std::pair<HINSTANCE, CString>> m_mapDll;
 	int m_nDllUseCount;
 	
-	CWinThread* m_pThread;
+	CPtrArray m_arThread;
 	CCriticalSection m_csStop;
 	BOOL m_bThreadStop;
 };

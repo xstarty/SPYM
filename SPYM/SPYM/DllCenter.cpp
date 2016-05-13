@@ -24,13 +24,13 @@
 CDllCenter::CDllCenter(CWnd *pParent)
 {
 	m_pParent = pParent;
-	m_nDllUseCount = 0;	
-	m_pThread = NULL;
+	m_nDllUseCount = 0;		
 	m_bThreadStop = FALSE;
 }
 
 CDllCenter::~CDllCenter()
 {
+	StopThread();
 }
 
 BOOL CDllCenter::LoadDll()
@@ -416,84 +416,6 @@ BOOL CDllCenter::StartThread()
 	}		
 	csStop.Unlock();
 
-	CWinThread* pThread = AfxBeginThread((AFX_THREADPROC)ExecThread, (LPVOID)this, THREAD_PRIORITY_NORMAL, CREATE_SUSPENDED, 0, NULL);
-	if (NULL == pThread)
-	{		
-		return FALSE;
-	}
-
-	m_pThread = pThread;
-	pThread->ResumeThread();
-
-	return TRUE;
-}
-
-BOOL CDllCenter::StopThread()
-{	
-	if (m_pThread == NULL)
-		return TRUE;
-
-	if (m_pThread->m_hThread == NULL)
-		return TRUE;
-
-	CSingleLock csStop(&m_csStop);
-	csStop.Lock();
-	{
-		m_bThreadStop = TRUE;
-	}
-	csStop.Unlock();
-
-	DWORD dwCode = ::WaitForSingleObject(m_pThread->m_hThread, 5000);
-	if (dwCode != WAIT_OBJECT_0)
-	{
-		DWORD dwExitCode;
-		if (GetExitCodeThread(m_pThread->m_hThread, &dwExitCode) && dwExitCode == STILL_ACTIVE)
-		{
-			::TerminateThread(m_pThread->m_hThread, -1);
-		}
-	}
-
-	m_pThread->m_hThread = NULL;
-	m_pThread = NULL;
-
-	return TRUE;
-}
-
-BOOL CDllCenter::SuspendThread()
-{
-	if (m_pThread)
-	{
-		m_pThread->SuspendThread();
-
-		return TRUE;
-	}
-		
-	return FALSE;
-}
-
-BOOL CDllCenter::ResumeThread()
-{
-	if (m_pThread)
-	{ 
-		m_pThread->ResumeThread();
-		return TRUE;
-	}
-
-	return FALSE;
-	
-}
-
-void CDllCenter::ExecThread(LPVOID lParam)
-{
-	CDllCenter* pObject = (CDllCenter*)lParam;
-	if(pObject)
-		pObject->ExecThreadImp();
-
-	return;
-}
-
-BOOL CDllCenter::ExecThreadImp()
-{
 	std::pair<HINSTANCE, CString> Info;
 	POSITION pos = m_mapDll.GetStartPosition();
 	while (pos != NULL)
@@ -502,16 +424,96 @@ BOOL CDllCenter::ExecThreadImp()
 		m_mapDll.GetNextAssoc(pos, nIndex, Info);
 		{
 			CString strTemp;
-			fpExec fpExecDll = (fpExec)LoadDllFun(Info.first, strTemp, $EXEC);
+			fpExec fpExecDll = (fpExec)LoadDllFun(Info.first, strTemp, $EXEC);			
 			if (fpExecDll == NULL)
 				continue;
 
-			if (!fpExecDll(m_pParent))
-			{				
-				continue;
-			}
+			ExecThreadImp(fpExecDll);
 		}
 	}
+
+	return TRUE;
+}
+
+BOOL CDllCenter::StopThread()
+{	
+	CSingleLock csStop(&m_csStop);
+	csStop.Lock();
+	{
+		m_bThreadStop = TRUE;
+	}
+	csStop.Unlock();
+
+	CWinThread *pThread = NULL;
+	for (int i = 0; i < m_arThread.GetCount(); ++i)
+	{
+		pThread = (CWinThread*)m_arThread.GetAt(i);
+		if (pThread == NULL)
+			return TRUE;
+
+		if (pThread->m_hThread == NULL)
+			return TRUE;
+
+		DWORD dwCode = ::WaitForSingleObject(pThread->m_hThread, 5000);
+		if (dwCode != WAIT_OBJECT_0)
+		{
+			DWORD dwExitCode;
+			if (GetExitCodeThread(pThread->m_hThread, &dwExitCode) && dwExitCode == STILL_ACTIVE)
+			{
+				::TerminateThread(pThread->m_hThread, -1);
+			}
+		}
+
+		pThread->m_hThread = NULL;
+		delete pThread;
+		pThread = NULL;
+	}
+
+	m_arThread.RemoveAll();
+
+	return TRUE;
+}
+
+BOOL CDllCenter::SuspendThread()
+{
+	CWinThread *pThread = NULL;
+	for (int i = 0; i < m_arThread.GetCount(); ++i)
+	{
+		pThread = (CWinThread*)m_arThread.GetAt(i);
+		if (pThread == NULL)
+			continue;
+
+		pThread->SuspendThread();
+	}
+
+	return TRUE;
+}
+
+BOOL CDllCenter::ResumeThread()
+{
+	CWinThread *pThread = NULL;
+	for (int i = 0; i < m_arThread.GetCount(); ++i)
+	{
+		pThread = (CWinThread*)m_arThread.GetAt(i);
+		if (pThread == NULL)
+			continue;
+
+		pThread->ResumeThread();
+	}
+
+	return TRUE;	
+}
+
+BOOL CDllCenter::ExecThreadImp(fpExec fpExecDll)
+{
+	CWinThread* pThread = AfxBeginThread((AFX_THREADPROC)fpExecDll, (LPVOID)m_pParent, THREAD_PRIORITY_NORMAL, CREATE_SUSPENDED, 0, NULL);
+	if (NULL == pThread)
+		return FALSE;
+	
+	pThread->m_bAutoDelete = FALSE;
+	pThread->ResumeThread();
+
+	m_arThread.Add(pThread);
 
 	return TRUE;
 }
