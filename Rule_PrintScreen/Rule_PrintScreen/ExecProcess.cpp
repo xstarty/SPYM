@@ -5,7 +5,10 @@
 #include "Rule_PrintScreen.h"
 #include "ExecProcess.h"
 #include <atlimage.h>
+
 #include "aviUtil.h"
+#include "CxImage\ximage.h"
+#pragma comment(lib, "lib/cximage.lib")
 
 // ExecProcess
 
@@ -30,10 +33,30 @@ BOOL CExecProcess::StartProcess()
 	//include "aviUtil.h".
 	//Call START_AVI("foo.avi"); // you must include the .avi extention.
 	//Call ADD_FRAME_FROM_DIB_TO_AVI(yourDIB, "DIB", 30); // the dib is passed in as a HANDLE which can be obtained by loading the image with a Image library. (I used CxImage which is available on this site). Put this call in a while or for loop to add all the images you want to the AVI.
-	//Call STOP_AVI(); //this closes the avi and video. 
+	//Call STOP_AVI(); //this closes the avi and video. 	
+	CFileFind finder;
+	CString strPath, strFind;
+	strFind = m_strPath + L"\\\\";
+	strFind += "*.dll";
+	
 	START_AVI(L"foo.avi");
-	ADD_FRAME_FROM_DIB_TO_AVI(yourDIB, L"DIB", 30);
-	STOP_AVI();
+	
+	BOOL bWorking = finder.FindFile(strFind);
+		
+	while (bWorking)
+	{
+		bWorking = finder.FindNextFile();
+		strPath = m_strPath + finder.GetFileName();
+
+		TCHAR* buf = new TCHAR[strPath.GetLength() + 1];
+		lstrcpy(buf, strPath);
+		CxImage imgJpg(L"", CXIMAGE_FORMAT_JPG);
+		delete[]buf;
+
+		ADD_FRAME_FROM_DIB_TO_AVI(imgJpg.GetDIB(), L"DIB", 30);
+	}
+
+	STOP_AVI();	
 
 	while (!m_bStop)
 	{

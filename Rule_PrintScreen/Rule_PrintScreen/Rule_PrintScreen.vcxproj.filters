@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="lib">
+      <UniqueIdentifier>{cb53b4c2-65c4-4d1b-b778-0681bb0aa522}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CxImage">
+      <UniqueIdentifier>{474a8e8d-c73b-44d0-9e80-06fd19e36898}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -59,6 +65,24 @@
     <ClInclude Include="aviUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CxImage\xfile.h">
+      <Filter>CxImage</Filter>
+    </ClInclude>
+    <ClInclude Include="CxImage\ximacfg.h">
+      <Filter>CxImage</Filter>
+    </ClInclude>
+    <ClInclude Include="CxImage\ximadef.h">
+      <Filter>CxImage</Filter>
+    </ClInclude>
+    <ClInclude Include="CxImage\ximage.h">
+      <Filter>CxImage</Filter>
+    </ClInclude>
+    <ClInclude Include="CxImage\xiofile.h">
+      <Filter>CxImage</Filter>
+    </ClInclude>
+    <ClInclude Include="CxImage\xmemfile.h">
+      <Filter>CxImage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Rule_PrintScreen.def">
@@ -72,5 +96,13 @@
     <ResourceCompile Include="Rule_PrintScreen.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="lib\cximage.lib">
+      <Filter>lib</Filter>
+    </Library>
+    <Library Include="lib\Jpeg.lib">
+      <Filter>lib</Filter>
+    </Library>
   </ItemGroup>
 </Project>

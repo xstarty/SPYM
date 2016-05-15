@@ -98,6 +98,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ModuleDefinitionFile>.\Rule_PrintScreen.def</ModuleDefinitionFile>
       <AdditionalDependencies>Vfw32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>libd</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -149,6 +150,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ModuleDefinitionFile>.\Rule_PrintScreen.def</ModuleDefinitionFile>
       <AdditionalDependencies>Vfw32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>lib</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -205,6 +207,12 @@
   <ItemGroup>
     <ClInclude Include="aviUtil.h" />
     <ClInclude Include="Control.h" />
+    <ClInclude Include="CxImage\xfile.h" />
+    <ClInclude Include="CxImage\ximacfg.h" />
+    <ClInclude Include="CxImage\ximadef.h" />
+    <ClInclude Include="CxImage\ximage.h" />
+    <ClInclude Include="CxImage\xiofile.h" />
+    <ClInclude Include="CxImage\xmemfile.h" />
     <ClInclude Include="ExecProcess.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Rule_PrintScreen.h" />
@@ -218,6 +226,10 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Rule_PrintScreen.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="lib\cximage.lib" />
+    <Library Include="lib\Jpeg.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

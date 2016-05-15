@@ -22,7 +22,7 @@ public:
 	{
 		if (m_fp) return false;	// Can't re-open without closing first
 
-		m_fp = _tfopen(filename, mode);
+		_tfopen_s(&m_fp, filename, mode);
 		if (!m_fp) return false;
 
 		m_bCloseFile = true;
@@ -114,7 +114,7 @@ public:
 	virtual int32_t	Scanf(const char *format, void* output)
 	{
 		if (!m_fp) return EOF;
-		return fscanf(m_fp, format, output);
+		return fscanf_s(m_fp, format, output);
 	}
 //////////////////////////////////////////////////////////
 protected:

@@ -6,7 +6,7 @@
 #include "Utility.h"
 
 #include "json/json.h"
-#pragma comment(lib, "lib/lib_json.lib")
+#pragma comment(lib, "lib_json.lib")
 
 #define $WndHieghtPos 30
 #define $SaveDataFile "\\DllSI"
