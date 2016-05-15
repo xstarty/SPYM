@@ -19,6 +19,9 @@
     <Filter Include="CxImage">
       <UniqueIdentifier>{474a8e8d-c73b-44d0-9e80-06fd19e36898}</UniqueIdentifier>
     </Filter>
+    <Filter Include="libd">
+      <UniqueIdentifier>{7d677608-8f19-4e87-9913-a327e99a9e83}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -103,6 +106,12 @@
     </Library>
     <Library Include="lib\Jpeg.lib">
       <Filter>lib</Filter>
+    </Library>
+    <Library Include="libd\Jpeg.lib">
+      <Filter>libd</Filter>
+    </Library>
+    <Library Include="libd\cximage.lib">
+      <Filter>libd</Filter>
     </Library>
   </ItemGroup>
 </Project>

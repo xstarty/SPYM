@@ -19,6 +19,9 @@
     <Filter Include="Source Files\lib">
       <UniqueIdentifier>{1eaa00ef-0aa3-4107-b979-4cabdbb14818}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\libd">
+      <UniqueIdentifier>{bc2d869b-430a-4958-93f3-2acf5275e084}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SPYM.h">
@@ -111,6 +114,9 @@
   <ItemGroup>
     <Library Include="lib\lib_json.lib">
       <Filter>Source Files\lib</Filter>
+    </Library>
+    <Library Include="libd\lib_json.lib">
+      <Filter>Source Files\libd</Filter>
     </Library>
   </ItemGroup>
   <ItemGroup>

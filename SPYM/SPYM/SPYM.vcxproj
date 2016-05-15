@@ -233,6 +233,7 @@
     <Image Include="res\SPYM.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Library Include="libd\lib_json.lib" />
     <Library Include="lib\lib_json.lib" />
   </ItemGroup>
   <ItemGroup>

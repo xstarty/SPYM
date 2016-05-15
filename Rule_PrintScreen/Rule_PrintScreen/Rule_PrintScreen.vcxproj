@@ -228,6 +228,8 @@
     <ResourceCompile Include="Rule_PrintScreen.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Library Include="libd\cximage.lib" />
+    <Library Include="libd\Jpeg.lib" />
     <Library Include="lib\cximage.lib" />
     <Library Include="lib\Jpeg.lib" />
   </ItemGroup>
