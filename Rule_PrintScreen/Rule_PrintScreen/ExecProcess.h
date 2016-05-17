@@ -14,6 +14,7 @@ public:
 	BOOL StopProcess();
 
 private:
+	BOOL ConvertJpegToAvi();
 	BOOL PrintScreen();
 
 private:

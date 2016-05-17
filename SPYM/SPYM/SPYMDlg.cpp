@@ -110,15 +110,22 @@ afx_msg void CSPYMDlg::OnStart()
 		strText.LoadString(IDS_STOP);
 	}
 	else if (m_nStatus == $STATUS_START)
-	{		
+	{				
+		strText.LoadString(IDS_STOPING);
+		m_bStart.SetWindowText(strText);
+		m_bStart.EnableWindow(FALSE);
+
 		if (m_pDllCenter)
 		{
 			if (!m_pDllCenter->StopThread())
-				return;
+			{ 
+				// Do nothing .. Perhaps here need warning
+			}				
 		}
 		
 		m_nStatus = $STATUS_STOP;
 		strText.LoadString(IDS_START);
+		m_bStart.EnableWindow(TRUE);
 	}
 
 	m_bStart.SetWindowText(strText);

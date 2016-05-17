@@ -347,7 +347,7 @@ bool START_AVI(CString file_name)
 		return false;
 	}
 
-    if(! AVI_FileOpenWrite(&pfile, file_name.GetBuffer(-1)))
+    if(! AVI_FileOpenWrite(&pfile, file_name))
 	{
 		//printf("Error - AVI_FileOpenWrite()\n");
 		return false;

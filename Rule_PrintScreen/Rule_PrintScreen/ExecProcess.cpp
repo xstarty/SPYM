@@ -7,8 +7,14 @@
 #include <atlimage.h>
 
 #include "aviUtil.h"
-#include "CxImage\ximage.h"
-#pragma comment(lib, "lib/cximage.lib")
+
+#include "CxImage\\ximage.h"
+#ifdef DEBUG
+	#pragma comment(lib, "cximagedu.lib")
+#else
+	#pragma comment(lib, "cximageu.lib")
+#endif // DEBUG
+#pragma comment(lib, "Jpeg.lib")
 
 // ExecProcess
 
@@ -28,35 +34,8 @@ void CExecProcess::SetData(int nSec, CString strPath)
 }
 
 BOOL CExecProcess::StartProcess()
-{		
-
-	//include "aviUtil.h".
-	//Call START_AVI("foo.avi"); // you must include the .avi extention.
-	//Call ADD_FRAME_FROM_DIB_TO_AVI(yourDIB, "DIB", 30); // the dib is passed in as a HANDLE which can be obtained by loading the image with a Image library. (I used CxImage which is available on this site). Put this call in a while or for loop to add all the images you want to the AVI.
-	//Call STOP_AVI(); //this closes the avi and video. 	
-	CFileFind finder;
-	CString strPath, strFind;
-	strFind = m_strPath + L"\\\\";
-	strFind += "*.dll";
-	
-	START_AVI(L"foo.avi");
-	
-	BOOL bWorking = finder.FindFile(strFind);
-		
-	while (bWorking)
-	{
-		bWorking = finder.FindNextFile();
-		strPath = m_strPath + finder.GetFileName();
-
-		TCHAR* buf = new TCHAR[strPath.GetLength() + 1];
-		lstrcpy(buf, strPath);
-		CxImage imgJpg(L"", CXIMAGE_FORMAT_JPG);
-		delete[]buf;
-
-		ADD_FRAME_FROM_DIB_TO_AVI(imgJpg.GetDIB(), L"DIB", 30);
-	}
-
-	STOP_AVI();	
+{			
+	ConvertJpegToAvi();
 
 	while (!m_bStop)
 	{
@@ -74,6 +53,38 @@ BOOL CExecProcess::StopProcess()
 		return FALSE;
 
 	m_bStop = TRUE;
+
+	return TRUE;
+}
+
+BOOL CExecProcess::ConvertJpegToAvi()
+{
+	CFileFind finder;
+	CString strPath, strFind;
+	strFind = m_strPath + L"\\\\";
+	strFind += "*.jpg";
+
+	CTime tm = CTime::GetCurrentTime();
+	CString strDate = tm.Format("\\%Y%m%d_%H%M%S");
+	START_AVI(m_strPath + L"\\\\" + strDate +L".avi");
+
+	BOOL bWorking = finder.FindFile(strFind);
+	while (bWorking)
+	{
+		bWorking = finder.FindNextFile();
+		strPath = m_strPath + L"\\\\" + finder.GetFileName();
+
+		TCHAR* buf = new TCHAR[strPath.GetLength() + 1];
+		lstrcpy(buf, strPath);
+		CxImage imgJpg(buf, CXIMAGE_FORMAT_JPG);
+		delete[]buf;
+
+		ADD_FRAME_FROM_DIB_TO_AVI(imgJpg.GetDIB(), L"DIB", 1);
+
+		DeleteFile(strPath);	// Delete Jpeg file
+	}
+
+	STOP_AVI();
 
 	return TRUE;
 }

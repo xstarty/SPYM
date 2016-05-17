@@ -13,7 +13,15 @@
 #define VC_EXTRALEAN		// Exclude rarely-used stuff from Windows headers
 
 #ifndef WINVER
-#define WINVER 0x0501
+#define WINVER 0x0501 
+#endif
+
+#ifndef _WIN32_WINNT
+#define _WIN32_WINNT 0x0501
+#endif
+
+#ifndef _WIN32_IE
+#define _WIN32_IE 0x0501
 #endif
 
 #include <afxwin.h>         // MFC core and standard components

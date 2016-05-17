@@ -6,8 +6,8 @@
 #include "Utility.h"
 
 #include "json/json.h"
-#pragma comment(lib, "lib_json.lib")
-
+#pragma comment(lib, "lib_json.lib") 
+ 
 #define $WndHieghtPos 30
 #define $SaveDataFile "\\DllSI"
 
@@ -320,7 +320,7 @@ BOOL CDllCenter::GetDllPath(CStringArray& arDllPath)
 	CString strPath(GetPath(FALSE));
 
 	CFileFind finder;
-	BOOL bWorking = finder.FindFile(strPath + _T("\\\\" + "*.dll"));
+	BOOL bWorking = finder.FindFile(strPath + _T("\\\\" + "Rule*.dll"));
 	while (bWorking)
 	{
 		bWorking = finder.FindNextFile();
@@ -337,9 +337,11 @@ HINSTANCE CDllCenter::LoadDllLibrary(CString strDllPath)
 	HINSTANCE handler = LoadLibrary(lpwText);
 	if (handler == NULL)
 	{
+		int nErr = GetLastError();
+
 		CString strError, strText;
 		strText.LoadString(IDS_LOAD_DLL_FAIL);
-		strError.Format(strText, strDllPath);
+		strError.Format(strText, strDllPath, nErr);
 
 		Utility::ShowMessageBox(m_pParent->GetSafeHwnd(), strError, MB_OK);
 
@@ -356,9 +358,11 @@ void* CDllCenter::LoadDllFun(HINSTANCE hr, CString strDllPath, CString strFun)
 	FARPROC fp = GetProcAddress(hr, lpcText);
 	if (fp == NULL)
 	{
+		int nErr = GetLastError();
+
 		CString strError, strText;
 		strText.LoadString(IDS_LOAD_FUN_FAIL);
-		strError.Format(strText, strDllPath, strFun);
+		strError.Format(strText, strDllPath, strFun, nErr);
 
 		Utility::ShowMessageBox(m_pParent->GetSafeHwnd(), strError, MB_OK);
 

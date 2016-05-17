@@ -1,0 +1,1 @@
+Rebuild Tools\cximage701_full\CxImgLib.sln Unicode лс Copy cximageu.lib, Jpeg.lib and cximagedu.dll(This copy to .exe)
