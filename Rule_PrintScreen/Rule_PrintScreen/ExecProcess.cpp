@@ -6,16 +6,6 @@
 #include "ExecProcess.h"
 #include <atlimage.h>
 
-#include "aviUtil.h"
-
-#include "CxImage\\ximage.h"
-#ifdef DEBUG
-	#pragma comment(lib, "cximagedu.lib")
-#else
-	#pragma comment(lib, "cximageu.lib")
-#endif // DEBUG
-#pragma comment(lib, "Jpeg.lib")
-
 // ExecProcess
 
 CExecProcess::CExecProcess()
@@ -59,32 +49,21 @@ BOOL CExecProcess::StopProcess()
 
 BOOL CExecProcess::ConvertJpegToAvi()
 {
-	CFileFind finder;
-	CString strPath, strFind;
-	strFind = m_strPath + L"\\\\";
-	strFind += "*.jpg";
+	CString strPath;
+	strPath = m_strPath + L"\\\\";
 
 	CTime tm = CTime::GetCurrentTime();
-	CString strDate = tm.Format("\\%Y%m%d_%H%M%S");
-	START_AVI(m_strPath + L"\\\\" + strDate +L".avi");
+	CString strDate = tm.Format("%Y%m%d_%H%M%S");
 
-	BOOL bWorking = finder.FindFile(strFind);
-	while (bWorking)
-	{
-		bWorking = finder.FindNextFile();
-		strPath = m_strPath + L"\\\\" + finder.GetFileName();
-
-		TCHAR* buf = new TCHAR[strPath.GetLength() + 1];
-		lstrcpy(buf, strPath);
-		CxImage imgJpg(buf, CXIMAGE_FORMAT_JPG);
-		delete[]buf;
-
-		ADD_FRAME_FROM_DIB_TO_AVI(imgJpg.GetDIB(), L"DIB", 1);
-
-		DeleteFile(strPath);	// Delete Jpeg file
-	}
-
-	STOP_AVI();
+	CString strCmd;
+#ifdef DEBUG
+	strCmd = L"Debug_JpegToAvi.bat " + strDate;
+#else
+	strCmd = L"JpegToAvi.bat " + strDate;
+#endif // DEBUG
+	
+	strPath += strCmd;
+	system(CT2CA(strPath));
 
 	return TRUE;
 }

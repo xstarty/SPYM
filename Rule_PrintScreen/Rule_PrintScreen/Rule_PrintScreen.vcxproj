@@ -206,7 +206,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="aviUtil.h" />
     <ClInclude Include="Control.h" />
     <ClInclude Include="CxImage\xfile.h" />
     <ClInclude Include="CxImage\ximacfg.h" />

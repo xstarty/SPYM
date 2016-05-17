@@ -62,9 +62,6 @@
     <ClInclude Include="ExecProcess.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="aviUtil.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CxImage\xfile.h">
       <Filter>CxImage</Filter>
     </ClInclude>
