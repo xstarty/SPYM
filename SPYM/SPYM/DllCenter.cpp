@@ -18,6 +18,7 @@
 #define $LOADWNDPARAMETER _T("LoadWndParameter")
 #define $GETGUID _T("GetGUID")
 #define $EXEC _T("Exec")
+#define $EXECSTOP _T("ExecStop")
 
 // CDllCenter
 
@@ -30,7 +31,6 @@ CDllCenter::CDllCenter(CWnd *pParent)
 
 CDllCenter::~CDllCenter()
 {
-	StopThread();
 }
 
 BOOL CDllCenter::LoadDll()
@@ -79,6 +79,8 @@ BOOL CDllCenter::LoadDll()
 
 BOOL CDllCenter::FinishDll()
 {	
+	StopThread();
+
 	std::pair<HINSTANCE, CString> Info;
 	POSITION pos = m_mapDll.GetStartPosition();
 	while (pos != NULL)
@@ -447,6 +449,23 @@ BOOL CDllCenter::StopThread()
 		m_bThreadStop = TRUE;
 	}
 	csStop.Unlock();
+
+	std::pair<HINSTANCE, CString> Info;
+	POSITION pos = m_mapDll.GetStartPosition();
+	while (pos != NULL)
+	{
+		int nIndex = -1;
+		m_mapDll.GetNextAssoc(pos, nIndex, Info);
+		{
+			CString strTemp;
+			fpExecStop fpStop = (fpExecStop)LoadDllFun(Info.first, strTemp, $EXECSTOP);
+			if (fpStop == NULL)
+				return FALSE;
+
+			if (!fpStop())
+				return FALSE;
+		}
+	}
 
 	CWinThread *pThread = NULL;
 	for (int i = 0; i < m_arThread.GetCount(); ++i)

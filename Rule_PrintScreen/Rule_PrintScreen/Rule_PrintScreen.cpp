@@ -87,6 +87,14 @@ BOOL Exec(CWnd* pParent)
 }
 
 extern "C" __declspec(dllexport)
+BOOL ExecStop()
+{
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+	return theApp.ExecStop();
+}
+
+extern "C" __declspec(dllexport)
 BOOL PreTranlateMsg(void *pParam)
 {	
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -198,6 +206,20 @@ BOOL CRule_PringScreenApp::Exec(CWnd* pParent)
 	m_pExec->SetData(m_pSetupWnd->GetSec(), m_pSetupWnd->GetPath());
 
 	m_pExec->StartProcess();
+
+	return TRUE;
+}
+
+BOOL CRule_PringScreenApp::ExecStop()
+{
+	if (!m_pSetupWnd)
+		return FALSE;
+
+	if (!m_pSetupWnd->IsEnable())
+		return FALSE;
+
+	if(m_pExec)
+		m_pExec->StopProcess();
 
 	return TRUE;
 }

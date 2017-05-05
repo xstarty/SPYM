@@ -25,8 +25,6 @@ void CExecProcess::SetData(int nSec, CString strPath)
 
 BOOL CExecProcess::StartProcess()
 {			
-	ConvertJpegToAvi();
-
 	while (!m_bStop)
 	{
 		PrintScreen();
@@ -43,6 +41,8 @@ BOOL CExecProcess::StopProcess()
 		return FALSE;
 
 	m_bStop = TRUE;
+
+	ConvertJpegToAvi();
 
 	return TRUE;
 }

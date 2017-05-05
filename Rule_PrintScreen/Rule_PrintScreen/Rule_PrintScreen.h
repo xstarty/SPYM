@@ -36,6 +36,7 @@ public:
 	BOOL LoadWndParameter(TCHAR* tc);
 
 	BOOL Exec(CWnd* pParent);
+	BOOL ExecStop();
 
 private:
 	CSetupWnd* m_pSetupWnd;	

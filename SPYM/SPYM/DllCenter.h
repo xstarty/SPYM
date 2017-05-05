@@ -11,6 +11,7 @@ typedef BOOL	(*fpFinish)();
 typedef TCHAR*	(*fpSaveDll)(TCHAR* tc);
 typedef TCHAR*	(*fpLoadDll)(TCHAR* tc);
 typedef BOOL	(*fpExec)(CWnd* pParent);
+typedef BOOL	(*fpExecStop)();
 
 // CDllCenter
 
