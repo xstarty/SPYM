@@ -2,7 +2,7 @@
 //
 
 #include "stdafx.h"
-#include "Rule_PrintScreen.h"
+#include "Rule_KeyboardRecorder.h"
 #include "SetupWnd.h"
 #include "Control.h"
 
@@ -68,18 +68,6 @@ void CSetupWnd::OnDestroy()
 		m_btnEnable = NULL;
 	}
 
-	if (m_stSec)
-	{
-		delete m_stSec;
-		m_stSec = NULL;
-	}
-
-	if (m_edSec)
-	{
-		delete m_edSec;
-		m_edSec = NULL;
-	}
-
 	if (m_stPath)
 	{
 		delete m_stPath;
@@ -127,20 +115,6 @@ BOOL CSetupWnd::InitWnd(CWnd* pParent)
 		m_btnEnable->SetCheck(FALSE);
 	}		
 
-	m_stSec = new CStatic();
-	if (m_stSec)
-	{
-		strText.LoadString(IDS_WND_SEC);
-		m_stSec->Create(strText, WS_CHILD | WS_VISIBLE, CRect(100, 15, 255, 30), this, IDC_ST01);
-	}
-
-	m_edSec = new CNumEdit();
-	if (m_edSec)
-	{
-		m_edSec->Create(WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_BORDER | ES_RIGHT, CRect(100, 33, 160, 53), this, IDC_ED01);
-		m_edSec->SetWindowText(L"10");
-	}
-
 	m_stPath = new CStatic();
 	if (m_stPath)
 	{
@@ -172,14 +146,10 @@ BOOL CSetupWnd::SaveWndParameter(CString& strParameter)
 	CString strTemp;
 	strParameter.Empty();
 
-	if (!m_edSec || !m_edPath)
+	if (!m_edPath)
 		return FALSE;
 
 	strParameter += m_btnEnable->GetCheck() == 1 ? "1" : "0";
-	strParameter += ",";
-
-	m_edSec->GetWindowText(strTemp);
-	strParameter += strTemp;
 	strParameter += ",";
 
 	m_edPath->GetWindowText(strTemp);
@@ -192,7 +162,7 @@ BOOL CSetupWnd::LoadWndParameter(CString& strParameter)
 {
 	CStringArray arData;
 
-	if (!m_edSec || !m_edPath)
+	if (!m_edPath)
 		return FALSE;
 
 	CString sToken = _T("");
@@ -207,7 +177,6 @@ BOOL CSetupWnd::LoadWndParameter(CString& strParameter)
 		return FALSE;
 		
 	m_btnEnable->SetCheck(_tstoi(arData.GetAt($VALUE_ENABLE)));
-	m_edSec->SetWindowText(arData.GetAt($VALUE_SEC));
 
 	CString strTemp(arData.GetAt($VALUE_PATH));
 	strTemp.Replace(L"\\", L"\\\\");
@@ -220,14 +189,6 @@ BOOL CSetupWnd::LoadWndParameter(CString& strParameter)
 BOOL CSetupWnd::IsEnable()
 {
 	return m_btnEnable->GetCheck();
-}
-
-int CSetupWnd::GetSec()
-{
-	CString strTemp;
-	m_edSec->GetWindowText(strTemp);
-
-	return _tstoi(strTemp);
 }
 
 CString CSetupWnd::GetPath()

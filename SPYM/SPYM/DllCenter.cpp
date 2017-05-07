@@ -8,7 +8,7 @@
 #include "json/json.h"
 #pragma comment(lib, "lib_json.lib") 
  
-#define $WndHieghtPos 30
+#define $WndHieghtPos 80
 #define $SaveDataFile "\\DllSI"
 
 #define $INITWND _T("InitWnd")
@@ -406,7 +406,7 @@ BOOL CDllCenter::MoveDllWndPos(CWnd * pWnd, int nPos)
 	CRect rect;
 	m_pParent->GetClientRect(&rect);
 
-	pWnd->MoveWindow(0, $WndHieghtPos * (m_nDllUseCount - 1), rect.right, rect.bottom, TRUE);
+	pWnd->MoveWindow(10, 10 + $WndHieghtPos * (nPos - 1), rect.right, $WndHieghtPos, TRUE);
 
 	return FALSE;
 }
