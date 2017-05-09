@@ -243,3 +243,14 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/SPYM/Template
+/KeyboardHookDll/Template/KeyboardHookDll.tlog/link.write.1.tlog
+/KeyboardHookDll/Template/KeyboardHookDll.tlog/link.read.1.tlog
+/KeyboardHookDll/Template/KeyboardHookDll.tlog/link.command.1.tlog
+/KeyboardHookDll/Template/KeyboardHookDll.tlog/KeyboardHookDll.write.1u.tlog
+/KeyboardHookDll/Template/KeyboardHookDll.tlog/KeyboardHookDll.lastbuildstate
+/KeyboardHookDll/Template/KeyboardHookDll.tlog/CL.write.1.tlog
+/KeyboardHookDll/Template/KeyboardHookDll.tlog/CL.read.1.tlog
+/KeyboardHookDll/Template/KeyboardHookDll.tlog/CL.command.1.tlog
+/RecordPlayer/Template/RecordPlayer.tlog
+/RecordPlayer/Template

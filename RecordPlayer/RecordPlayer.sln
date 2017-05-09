@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RecordPlayer", "RecordPlayer.vcxproj", "{D940531B-AE2C-411D-B7DB-D7B32FCE241F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CFD84D90-54CA-4357-AF8C-73BBC9A798E4} = {CFD84D90-54CA-4357-AF8C-73BBC9A798E4}
+		{BC1CCDAB-D402-4D5C-A207-437C9643134C} = {BC1CCDAB-D402-4D5C-A207-437C9643134C}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KeyboardHookDll", "..\KeyboardHookDll\KeyboardHookDll.vcxproj", "{BC1CCDAB-D402-4D5C-A207-437C9643134C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MouseHookDll", "..\MouseHookDll\MouseHookDll.vcxproj", "{CFD84D90-54CA-4357-AF8C-73BBC9A798E4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Release|x86 = Release|x86
+		Template|x86 = Template|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D940531B-AE2C-411D-B7DB-D7B32FCE241F}.Release|x86.ActiveCfg = Release|Win32
+		{D940531B-AE2C-411D-B7DB-D7B32FCE241F}.Release|x86.Build.0 = Release|Win32
+		{D940531B-AE2C-411D-B7DB-D7B32FCE241F}.Template|x86.ActiveCfg = Template|Win32
+		{D940531B-AE2C-411D-B7DB-D7B32FCE241F}.Template|x86.Build.0 = Template|Win32
+		{BC1CCDAB-D402-4D5C-A207-437C9643134C}.Release|x86.ActiveCfg = Release|Win32
+		{BC1CCDAB-D402-4D5C-A207-437C9643134C}.Release|x86.Build.0 = Release|Win32
+		{BC1CCDAB-D402-4D5C-A207-437C9643134C}.Template|x86.ActiveCfg = Template|Win32
+		{BC1CCDAB-D402-4D5C-A207-437C9643134C}.Template|x86.Build.0 = Template|Win32
+		{CFD84D90-54CA-4357-AF8C-73BBC9A798E4}.Release|x86.ActiveCfg = Release|Win32
+		{CFD84D90-54CA-4357-AF8C-73BBC9A798E4}.Release|x86.Build.0 = Release|Win32
+		{CFD84D90-54CA-4357-AF8C-73BBC9A798E4}.Template|x86.ActiveCfg = Release|Win32
+		{CFD84D90-54CA-4357-AF8C-73BBC9A798E4}.Template|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
